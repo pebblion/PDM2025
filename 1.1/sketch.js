@@ -11,8 +11,8 @@ function sketch()
   stroke('black');
   strokeWeight('1');
   fill(0, 0, 100);
-  circle(windowWidth / 4, windowHeight / 2 - 250, 500);
-  square((windowWidth / 2), windowHeight / 4, 500);
+  circle(windowWidth / 4, windowHeight / 2, 500);
+  square((windowWidth / 2), windowHeight / 2 - 250, 500);
 }
 
 function sketch1()
