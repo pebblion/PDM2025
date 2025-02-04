@@ -14,9 +14,9 @@ function setup() {
   square(0, 220, 50);
   fill("blue");
   square(0, 275, 50);
-  fill("pink");
+  fill("hotpink");
   square(0, 330, 50);
-  fill("brown");
+  fill("saddlebrown");
   square(0, 385, 50);
   fill("white");
   square(0, 440, 50);
@@ -43,12 +43,10 @@ function mousePressed()
     else if (mouseY < 220) {stroke("green");}
     else if (mouseY < 275) {stroke("cyan");}
     else if (mouseY < 330) {stroke("blue");}
-    else if (mouseY < 385) {stroke("pink");}
-    else if (mouseY < 440) {stroke("brown");}
+    else if (mouseY < 385) {stroke("hotpink");}
+    else if (mouseY < 440) {stroke("saddlebrown");}
     else if (mouseY < 495) {stroke("white");}
     else if (mouseY < 550) {stroke("black");}
-
-
     
   }
 }
