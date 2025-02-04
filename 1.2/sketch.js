@@ -1,8 +1,6 @@
 function setup() {
   createCanvas(2000,1000);
-}
 
-function draw() {
   background('white');
   fill("red");
   square(0, 0, 50);
@@ -25,6 +23,12 @@ function draw() {
   fill("black");
   square(0, 495, 50);
 
+  strokeWeight(10);
+
+}
+
+function draw() {
+  
 }
 
 function mousePressed()
@@ -33,6 +37,28 @@ function mousePressed()
   if (mouseX > 0 && mouseX < 50)
   {
     //red
+    if (mouseY < 55){ stroke("red");}
+    else if (mouseY < 110) {stroke("orange");}
+    else if (mouseY < 165) {stroke("yellow");}
+    else if (mouseY < 220) {stroke("green");}
+    else if (mouseY < 275) {stroke("cyan");}
+    else if (mouseY < 330) {stroke("blue");}
+    else if (mouseY < 385) {stroke("pink");}
+    else if (mouseY < 440) {stroke("brown");}
+    else if (mouseY < 495) {stroke("white");}
+    else if (mouseY < 550) {stroke("black");}
+
+
     
   }
+}
+
+function mouseDragged()
+{
+  if(mouseX > 50)
+  {
+    stroke("red", 90, 90);
+    line(pmouseX, pmouseY, mouseX, mouseY);
+  }
+    
 }
