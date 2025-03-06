@@ -1,82 +1,105 @@
-let synth1, filter, reverb, activeKey, polySynth, noise1;
+let moodSynth, backSynth, melodySynth, reverb;
 
-function preload() {
-
+let moodNotes = {
+  "q": "C4",
+  "w": "Eb4",
+  //D minor
+  "e": "D4",
+  "r": "F4",
+  "t": "A4",
+  // E minor
+  "y": "E4",
+  "u": "G4",
+  "i": "B4",
 }
 
-let keynotes = {
-  "a": "A4",
-  "s": "B4",
-  "d": "C5",
-  "f": "D5",
+let backNotes= {
+  "a": "C4",
+  "s": "C5"
 }
 
-let keynotes1 = { 
-  "q": "D4",
-  "w": "F4",
-  "e": "G4",
-  "r": "A5",
-  "t": "G5"
+let melody={
+  "g": "D4",
+  "h": "F4",
+  "j": "D5",
+  "k": "E5",
+  "l": "F5",
+  "v": "C5",
+  "b": "A4",
+  "n": "G4",
+  "m": "E4"
 }
+
 function setup() {
   createCanvas(400, 400);
-  filter = new Tone.Filter(1000, "lowpass").toDestination();
-  reverb = new Tone.Reverb(2).connect(filter);
-  synth1 = new Tone.Synth({
+  reverb = new Tone.Reverb(2).toDestination();
+  filt = new Tone.Filter(1000, "lowpass").connect(reverb)
+  backFilt = new Tone.Filter(1500, "lowpass").connect(reverb)
+  backSynth = new Tone.PolySynth(Tone.Synth).connect(backFilt);
+  backSynth.set({
     envelope: {
-      attack: 0.1,
+      attack: 0.5,
       decay: 0.2,
-      sustain: 0.9,
-      release: 0.3
-    }
-  }).connect(reverb);
-  synth1.portamento.value = 0.5;
-  polySynth = new Tone.PolySynth(Tone.Synth).connect(reverb);
-  polySynth.set({
-    envelope: {
-      attack: 0.1,
-      decay: 0.5,
-      sustain: 1,
-      release: 0.5
+      sustain: 0.1,
+      release: 0.1
     },
-    /*
+
+    
     oscillator: {
       type: 'sawtooth'
     }
-      */
+    
   })
-  polySynth.volume.value = 0.4;
-  ampEnv = new Tone.AmplitudeEnvelope({
-    attack: 0.1,
-    decay: 0.5,
-    sustain: 0,
-    release: 0.1
+
+  moodSynth = new Tone.PolySynth(Tone.Synth).connect(filt);
+  moodSynth.set({
+    envelope: {
+      attack: 0.5,
+      decay: 0.5,
+      sustain: 0.9,
+      release: 0.5
+    },
+
+    oscillator: {
+      type: 'sine'
+    }
   })
-  //noise1 = new Tone.Noise().start();
+
+  melodySynth = new Tone.PolySynth(Tone.Synth).connect(filt);
+  melodySynth.set({
+    envelope: {
+      attack: 0.5,
+      decay: 0.5,
+      sustain: 0.9,
+      release: 0.5
+    },
+
+    oscillator: {
+      type: 'square'
+    }
+  })
 }
 
 function draw() {
   background(220);
 }
 
-function keyPressed() {
-  let pitch = keynotes[key];
-  let pitch1 = keynotes1[key];
-  if (pitch && key !== activeKey) {
-    synth1.triggerRelease(); 
-    synth1.triggerAttack(pitch);
-    activeKey = key;
-  } else if (pitch1) {
-    polySynth.triggerAttack(pitch1);
-  }
+function keyPressed()
+{
+  let backPitch = backNotes[key]
+  let moodPitch = moodNotes[key]
+  let melodyPitch = melody[key]
+  if(backPitch){backSynth.triggerAttack(backPitch)}
+  if(moodPitch){moodSynth.triggerAttack(moodPitch)}
+  if(melodyPitch){melodySynth.triggerAttack(melodyPitch)}
 }
 
-function keyReleased() {
-  let pitch1 = keynotes1[key];
-  if (key === activeKey) {
-    synth1.triggerRelease();
-    activeKey = null;
-} else if(pitch1) {
-  polySynth.triggerRelease(pitch1);
-}
+function keyReleased()
+{
+  let pitch = backNotes[key]
+  let moodPitch = moodNotes[key]
+  let melodyPitch = melody[key]
+  if(pitch) {backSynth.triggerRelease(pitch)}
+  if(moodPitch){moodSynth.triggerRelease(moodPitch)}
+  if(melodyPitch){melodySynth.triggerRelease(melodyPitch)}
 }
