@@ -13,11 +13,6 @@ let moodNotes = {
   "i": "B4",
 }
 
-let backNotes= {
-  "a": "C4",
-  "s": "C5"
-}
-
 let melody={
   "g": "D4",
   "h": "F4",
@@ -31,25 +26,9 @@ let melody={
 }
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(1000,800);
   reverb = new Tone.Reverb(2).toDestination();
   filt = new Tone.Filter(1000, "lowpass").connect(reverb)
-  backFilt = new Tone.Filter(1500, "lowpass").connect(reverb)
-  backSynth = new Tone.PolySynth(Tone.Synth).connect(backFilt);
-  backSynth.set({
-    envelope: {
-      attack: 0.5,
-      decay: 0.2,
-      sustain: 0.1,
-      release: 0.1
-    },
-
-    
-    oscillator: {
-      type: 'sawtooth'
-    }
-    
-  })
 
   moodSynth = new Tone.PolySynth(Tone.Synth).connect(filt);
   moodSynth.set({
@@ -64,7 +43,7 @@ function setup() {
       type: 'sine'
     }
   })
-
+  moodSynth.volume.value = 0.3; 
   melodySynth = new Tone.PolySynth(Tone.Synth).connect(filt);
   melodySynth.set({
     envelope: {
@@ -82,24 +61,27 @@ function setup() {
 
 function draw() {
   background(220);
+  textSize(20);
+  text('Two Synths', 300, 50)
+  text('Synth 1, sine oscillator', 100, 80)
+  text(' q: C4\n w: Eb4\n e: D4\n r: F4\n t: A4\n y: E4\n u: G4\n i: B4', 100, 120);
+  text('Synth 2, square oscillator', 500, 80);
+  text(' g: D4\n h: F4\n j: D5\n k: E5\n l: F5\n v: C5\n b: A4\n n: G4\n m: E4', 500, 120);
 }
 
 function keyPressed()
 {
-  let backPitch = backNotes[key]
   let moodPitch = moodNotes[key]
   let melodyPitch = melody[key]
-  if(backPitch){backSynth.triggerAttack(backPitch)}
   if(moodPitch){moodSynth.triggerAttack(moodPitch)}
   if(melodyPitch){melodySynth.triggerAttack(melodyPitch)}
 }
 
 function keyReleased()
 {
-  let pitch = backNotes[key]
   let moodPitch = moodNotes[key]
   let melodyPitch = melody[key]
-  if(pitch) {backSynth.triggerRelease(pitch)}
+ 
   if(moodPitch){moodSynth.triggerRelease(moodPitch)}
   if(melodyPitch){melodySynth.triggerRelease(melodyPitch)}
 }
