@@ -11,6 +11,9 @@ let port;
 let connectionButton;
 let zeroButton;
 let input;
+let speed = 0.01;
+let cursorX;
+let cursorY;
 
 function preload(){
   snake = loadImage("media/Snake.png");
@@ -18,14 +21,16 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(1000,1000);
+  createCanvas(1000,500);
   imageMode(CENTER);
-  frameRate(30);
+  //frameRate(30);
   port = createSerial(); 
   connectionButton = createButton("Connect");
   connectionButton.mousePressed(connect);
   zeroButton = createButton("Zero Joystick");
   zeroButton.mousePressed(zero);
+  cursorX = width/2;
+  cursorY = height/2; 
   player = new Player(10,10);
 }
 
@@ -53,12 +58,17 @@ function readJoystick()
       let y = Number(values[1]);
       let sw = Number(values[2]);
 
-      console.log(x + "," + y + "," + sw)
+      //console.log(x + "," + y + "," + sw)
+      cursorX += x * speed;
+      cursorY += y * speed;
+      //fill(0);
+      //console.log(cursorX);
+      //circle(cursorX, cursorY, 50);
     }
   }
 }
 function draw() {
-  background(0);
+  background(220);
 
   switch(gameState)
   {
@@ -66,6 +76,8 @@ function draw() {
       break;
     case GameStates.LEVEL1:
       player.draw();
+      readJoystick();
+      player.setPos(cursorX,cursorY);
   }
   //player.draw();
 }
@@ -81,8 +93,6 @@ class Player {
   draw()
   {
     
-    scale(3);
- 
     image(snake, this.x, this.y, 20, 20, this.sprite, 0, 25, 25);
     
     if (frameCount % 10 === 0)
@@ -95,6 +105,12 @@ class Player {
       this.sprite = 60;
     }
   }
+
+  setPos(x,y)
+  {
+    this.x = x;
+    this.y = y;
+  } 
 }
 
 class Enemy {
